@@ -1,9 +1,11 @@
 --2 - cumulative table generation query
 --min1970 max2021
-SELECT MIN(year), MAX(year)
-FROM actor_films;
+SELECT DISTINCT (year)
+FROM actor_films
+ORDER BY year;
 
 --query
+INSERT INTO actors
 WITH yesterday AS (SELECT * FROM actors WHERE current_year = 1969),
      today AS (SELECT actorid,
                       actor,

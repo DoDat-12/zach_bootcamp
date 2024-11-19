@@ -7,12 +7,12 @@ WHERE current_season = 2022;
 DROP TABLE players_scd;
 
 CREATE TYPE scd_type AS
-    (
+(
     scoring_class scoring_class,
-    is_active BOOLEAN,
-    start_season INTEGER,
-    end_season INTEGER
-    );
+    is_active     BOOLEAN,
+    start_season  INTEGER,
+    end_season    INTEGER
+);
 
 --create scd table
 CREATE TABLE players_scd
@@ -32,7 +32,9 @@ WITH with_previous AS (SELECT player_name,
                               current_season,
                               is_active,
                               LAG(scoring_class, 1)
-                                  OVER (PARTITION BY player_name ORDER BY current_season)                   AS previous_scoring_class, LAG(is_active, 1) OVER (PARTITION BY player_name ORDER BY current_season) AS previous_is_active
+                              OVER (PARTITION BY player_name ORDER BY current_season) AS previous_scoring_class,
+                              LAG(is_active, 1)
+                              OVER (PARTITION BY player_name ORDER BY current_season) AS previous_is_active
                        FROM players
                        WHERE current_season <= 2021),
      with_indicators AS (SELECT *,
@@ -44,7 +46,7 @@ WITH with_previous AS (SELECT player_name,
                          FROM with_previous),
      with_streaks AS (SELECT *,
                              SUM(change_indicator)
-                                 OVER (PARTITION BY player_name ORDER BY current_season) AS streak_identidier
+                             OVER (PARTITION BY player_name ORDER BY current_season) AS streak_identidier
                       FROM with_indicators)
 SELECT player_name,
        scoring_class,
@@ -78,19 +80,19 @@ WITH last_season_scd AS (SELECT * FROM players_scd WHERE current_season = 2021 A
                           WHERE ts.scoring_class = ls.scoring_class
                             AND ts.is_active = ls.is_active),
      changed_records AS (SELECT ts.player_name,
-                                UNNEST(ARRAY[
-                                           ROW(
-                                                   ls.scoring_class,
-                                                   ls.is_active,
-                                                   ls.start_season,
-                                                   ls.end_season
-                                           )::scd_type,
-                                       ROW(
-                                               ts.scoring_class,
-                                               ts.is_active,
-                                               ts.current_season,
-                                               ts.current_season
-                                       )::scd_type
+                                UNNEST(ARRAY [
+                                    ROW (
+                                        ls.scoring_class,
+                                        ls.is_active,
+                                        ls.start_season,
+                                        ls.end_season
+                                        )::scd_type,
+                                    ROW (
+                                        ts.scoring_class,
+                                        ts.is_active,
+                                        ts.current_season,
+                                        ts.current_season
+                                        )::scd_type
                                     ]) AS record
                          FROM this_season_data ts
                                   LEFT JOIN last_season_scd ls
@@ -98,13 +100,20 @@ WITH last_season_scd AS (SELECT * FROM players_scd WHERE current_season = 2021 A
                          WHERE ts.scoring_class <> ls.scoring_class
                             OR ts.is_active <> ls.is_active),
      unnested_changed_records AS (SELECT player_name,
-                                         (record::scd_type).scoring_class, (record::scd_type).is_active, (record::scd_type).start_season, (record::scd_type).end_season
-FROM changed_records), new_records AS (
-SELECT ts.player_name, ts.scoring_class, ts.is_active, ts.current_season AS start_season, ts.current_season AS end_season
-FROM this_season_data ts
-    LEFT JOIN last_season_scd ls
-ON ts.player_name = ls.player_name
-WHERE ls.player_name IS NULL)
+                                         (record::scd_type).scoring_class,
+                                         (record::scd_type).is_active,
+                                         (record::scd_type).start_season,
+                                         (record::scd_type).end_season
+                                  FROM changed_records),
+     new_records AS (SELECT ts.player_name,
+                            ts.scoring_class,
+                            ts.is_active,
+                            ts.current_season AS start_season,
+                            ts.current_season AS end_season
+                     FROM this_season_data ts
+                              LEFT JOIN last_season_scd ls
+                                        ON ts.player_name = ls.player_name
+                     WHERE ls.player_name IS NULL)
 
 SELECT *
 FROM historical_scd

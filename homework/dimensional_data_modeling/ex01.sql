@@ -1,5 +1,5 @@
-SELECT *
-FROM actor_films;
+-- SELECT *
+-- FROM actor_films;
 
 --1 - DDL for actors table
 --struct for film's information
