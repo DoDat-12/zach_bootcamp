@@ -13,7 +13,7 @@
         - Think of `scoring_class` from Week 1
     - `CASE WHEN` to bucketize aggregated facts can be very useful to reduce the cardinality (Cardinality đề cập đến số lượng giá trị khác nhau trong một cột)
 
-> 5 to 10 diff values is sweet to bucketizea (for normalize distribution)
+> 5 to 10 diff values is sweet to bucketize (for normalize distribution)
 
 ## Properties of Facts vs Dimensions
 
@@ -56,7 +56,7 @@
 - Often calculated  with CASE WHEN logic and "bucketizing"
     - Airbnb superhost
 
-## Shoud you use dimensions or facts to analyze users
+## Should you use dimensions or facts to analyze users
 
 - Is the `dim_is_actived` state or `dim_is_active` logs a better metric
     - It depends
