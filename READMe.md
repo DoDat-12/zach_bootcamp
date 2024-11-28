@@ -1,6 +1,6 @@
 ### Notes for YouTube DE boot camp by Zach Wilson
 
-![timeline](timeline.png)
+![timeline](img/timeline.png)
 
 This will be six weeks of curricula
 
