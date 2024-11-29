@@ -46,18 +46,18 @@
 > Trade off: Data get smaller, you lose the flexibility around what kind of data analytics you want to do on it, but worth the trade off of being able to do analytics more quickly
 
 ### Example Fact Data
-![Example Fact](../../../img/wk3_fact_example.png)
+![Example Fact](../../../../img/wk3_fact_example.png)
 
 - Very flexible, good for specific question
 - Very small time horizon (like recently), volume too big
 
 ### Example Daily Aggregated Data
-![Daily Aggregate](../../../img/wk3_fact_agg_example.png)
+![Daily Aggregate](../../../../img/wk3_fact_agg_example.png)
 
 - Work great with longer horizon
 
 ### Example Reduced Fact (Long-Array Metrics)
-![Reduced Fact](../../../img/wk3_reduced_fact_example.png)
+![Reduced Fact](../../../../img/wk3_reduced_fact_example.png)
 
 - One row per month, not monthly aggregate (still has all data each day in month stored in an array)
 - Date is index: 34 is 07-01, 3 is 07-02, ... (similar to date list, except now it's non-binary)
