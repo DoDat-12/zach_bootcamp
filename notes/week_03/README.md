@@ -135,3 +135,11 @@ Spark is distributed compute framework that allows you to process very large amo
 - Should almost always be partitioned on "date"
     - This is the execution date of the pipeline
     - In big tech this is called "ds partitioning"
+
+## sortWithinPartition() versus sort()
+
+- `sortWithinPartition()`: Sort data locally in each partition
+- `sort()`: Get all the data from all partitions (global sort) then sort
+
+> `sort()` is very slow
+
