@@ -1,3 +1,5 @@
+-- A DDL for an user_devices_cumulated table that has
+
 CREATE TABLE user_devices_cumulated
 (
     user_id                  NUMERIC,
